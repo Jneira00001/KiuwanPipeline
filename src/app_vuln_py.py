@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 import subprocess
 import pickle
 import base64
-
+# password=FXFESDA_TEST_123
 app = Flask(__name__)
 
 # Endpoint vulnerable a command injection
@@ -29,3 +29,4 @@ def load():
 
 if __name__ == '__main__':
     app.run(port=5000)
+
