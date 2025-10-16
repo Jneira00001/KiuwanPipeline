@@ -1,4 +1,4 @@
-name: Kiuwan Delivery (Demo)
+name: Kiuwan Delivery Demo
 
 on:
   push:
@@ -8,54 +8,36 @@ on:
     branches:
       - main
 
-env:
-  KIUWAN_APP_NAME: "test_demo"            # <- Nombre de la app en Kiuwan (ajusta si hace falta)
-  SRC_PATH: "./src"
-  KLA_ZIP_URL: "https://www.kiuwan.com/pub/analyzer/KiuwanLocalAnalyzer.zip"
-
 jobs:
   kiuwan-delivery:
-    name: "Kiuwan Delivery Analysis"
+    name: "Entrega automática en Kiuwan Lifecycle"
     runs-on: ubuntu-latest
-    timeout-minutes: 30
 
     steps:
-      - name: "Checkout repository"
+      # 1️⃣ Clona tu código fuente
+      - name: Checkout del repositorio
         uses: actions/checkout@v4
 
-      - name: "Show repo tree (debug)"
-        run: |
-          echo "Workspace: $(pwd)"
-          ls -la
-          echo "src content:"
-          ls -la ${{ env.SRC_PATH }} || true
+      # 2️⃣ Ejecuta el análisis y genera la entrega
+      - name: Ejecutar Delivery en Kiuwan
+        uses: lsacera/KiuwanDeliveryAction@v1.1
+        with:
+          # Nombre del proyecto en Kiuwan (ya existente)
+          project: test_demo
 
-      - name: "Download Kiuwan Local Analyzer (cached)"
-        id: download_kla
-        run: |
-          KLA_DIR="KiuwanLocalAnalyzer"
-          if [ -d "$KLA_DIR" ]; then
-            echo "KiuwanLocalAnalyzer already present"
-          else
-            echo "Downloading KLA..."
-            wget -q "$KLA_ZIP_URL" -O KLA.zip
-            unzip -q KLA.zip
-            rm -f KLA.zip
-          fi
-          echo "KLA path: $(pwd)/KiuwanLocalAnalyzer"
-          ls -la KiuwanLocalAnalyzer || true
+          # Etiqueta del análisis (se verá en "Delivery label")
+          label: "CodeBuild_${{ github.run_number }}"
 
-      - name: "Make KLA executable"
-        run: |
-          chmod -R +x KiuwanLocalAnalyzer/bin || true
-          file KiuwanLocalAnalyzer/bin/agent.sh || true
+          # Credenciales (desde Secrets)
+          userid: ${{ secrets.KIUWAN_USER }}
+          password: ${{ secrets.KIUWAN_PASS }}
 
-      - name: "Run Kiuwan Local Analyzer in Delivery mode"
-        id: run_kiuwan
-        env:
-          LABEL: "CodeBuild_${{ github.run_number }}"
-        run: |
-          set -euo pipefail
-          KLA="./KiuwanLocalAnalyzer/bin/agent.sh"
-          echo "Starting Kiuwan Delivery for app: ${KIUWAN_APP_NAME} (label=${LABEL})"
-          if [ -n "${
+          # Parámetros opcionales (para trazabilidad)
+          changerequest: "HU-${{ github.run_number }}"
+          branch: "main"
+          type: completeDelivery       # o partialDelivery
+          status: resolved             # o inprogress
+
+          # Parámetros avanzados (opcional)
+          # advancedparams: "--analyzeDependencies --encoding UTF-8"
+
