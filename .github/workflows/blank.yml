@@ -4,40 +4,29 @@ on:
   push:
     branches:
       - main
+      - QA
   pull_request:
     branches:
       - main
+      - QA
 
 jobs:
   kiuwan-delivery:
-    name: "Entrega automática en Kiuwan Lifecycle"
+    name: "Entrega automatizada en Kiuwan Lifecycle"
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Clona tu código fuente
-      - name: Checkout del repositorio
+      - name: "Checkout del código"
         uses: actions/checkout@v4
 
-      # 2️⃣ Ejecuta el análisis y genera la entrega
-      - name: Ejecutar Delivery en Kiuwan
+      - name: "Ejecutar Delivery Kiuwan"
         uses: lsacera/KiuwanDeliveryAction@v1.1
         with:
-          # Nombre del proyecto en Kiuwan (ya existente)
           project: test_demo
-
-          # Etiqueta del análisis (se verá en "Delivery label")
-          label: "CodeBuild_${{ github.run_number }}"
-
-          # Credenciales (desde Secrets)
+          label: "CodeBuild_${{ github.run_number }}"     # Delivery label visible en Kiuwan
           userid: ${{ secrets.KIUWAN_USER }}
           password: ${{ secrets.KIUWAN_PASS }}
-
-          # Parámetros opcionales (para trazabilidad)
-          changerequest: "HU-${{ github.run_number }}"
-          branch: "main"
-          type: completeDelivery       # o partialDelivery
-          status: resolved             # o inprogress
-
-          # Parámetros avanzados (opcional)
-          # advancedparams: "--analyzeDependencies --encoding UTF-8"
-
+          changerequest: "HU-${{ github.run_number }}"    # Relación con la HU o ticket
+          branch: ${{ github.ref_name }}                  # Detecta automáticamente la rama (main/QA)
+          type: completeDelivery
+          status: resolved
