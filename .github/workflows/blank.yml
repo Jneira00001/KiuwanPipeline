@@ -34,7 +34,7 @@ jobs:
 
           # Parámetros opcionales (para trazabilidad)
           changerequest: "HU-${{ github.run_number }}"
-          branch: "main"
+          branch: ${{ github.ref_name }}
           type: completeDelivery       # o partialDelivery
           status: resolved             # o inprogress
 
