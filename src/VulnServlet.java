@@ -4,7 +4,7 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
-// password=testprueba1234
+// password=testprueba12345
 public class VulnServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String user = req.getParameter("user");
@@ -36,5 +36,6 @@ public class VulnServlet extends HttpServlet {
         }
     }
 }
+
 
 
