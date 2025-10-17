@@ -11,7 +11,7 @@ $users = [
 
 // Input no validado desde GET
 $q = isset($_GET['user']) ? $_GET['user'] : '';
-
+//password=1233rfmd
 // *** VULNERABLE: se "evalúa" o se interpreta la entrada tal cual como filtro NoSQL ***
 // Simulamos que el desarrollador hace algo como: $filter = json_decode($_GET['user'], true);
 $filter = null;
