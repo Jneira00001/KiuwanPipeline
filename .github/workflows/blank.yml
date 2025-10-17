@@ -3,10 +3,10 @@ name: Kiuwan Delivery Demo
 on:
   push:
     branches:
-      - main
+      - QA
   pull_request:
     branches:
-      - main
+      - QA
 
 jobs:
   kiuwan-delivery:
