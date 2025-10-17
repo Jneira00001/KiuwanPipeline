@@ -4,7 +4,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
-//
+//test
 // DB de ejemplo
 const db = new sqlite3.Database(':memory:');
 db.serialize(() => {
@@ -28,4 +28,5 @@ app.post('/search', (req, res) => {
 });
 
 app.listen(3000, () => console.log('Vulnerable app running on :3000'));
+
 
