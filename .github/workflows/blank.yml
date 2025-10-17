@@ -23,7 +23,7 @@ jobs:
         uses: lsacera/KiuwanDeliveryAction@v1.1
         with:
           project: test_demo
-          deliverylabel: "CodeBuild_${{ github.run_number }}"     # Delivery label visible en Kiuwan
+          deliverylabel: CodeBuild_${{ github.run_number }}     # Delivery label visible en Kiuwan
           userid: ${{ secrets.KIUWAN_USER }}
           password: ${{ secrets.KIUWAN_PASS }}
           changerequest: "HU-${{ github.run_number }}"    # Relación con la HU o ticket
